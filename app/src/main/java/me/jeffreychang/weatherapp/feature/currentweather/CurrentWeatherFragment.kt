@@ -93,7 +93,7 @@ class CurrentWeatherFragment : ComposeFragment() {
         navViewModel.transitions().observe(viewLifecycleOwner) {
             when (it) {
                 is ScreenTransition.CitySelected -> {
-                    viewModel.getCurrentWeather()
+//                    viewModel.getCurrentWeather()
                 }
                 else -> {
 

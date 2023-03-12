@@ -12,7 +12,6 @@ class GetGeoCoderLocationUseCase @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val locationProvider: LocationProvider
 ) {
-
     suspend fun getGeoLocation(query: String): ResultOf<List<Location>> {
         return try {
             val geoLocation = weatherRepository.getGeoCodeLocation(query)

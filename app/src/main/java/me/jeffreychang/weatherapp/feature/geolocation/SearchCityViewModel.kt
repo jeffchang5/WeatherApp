@@ -21,13 +21,9 @@ class SearchCityViewModel @Inject constructor(
 
     private val locations = MutableLiveData<List<Location>>()
 
-    private val currentLocation = MutableLiveData<Location>()
-
     private var job: Job? = null
 
     fun locations(): LiveData<List<Location>> = locations
-
-    fun currentLocation(): LiveData<Location> = currentLocation
 
     fun search(query: String) {
         debounce {

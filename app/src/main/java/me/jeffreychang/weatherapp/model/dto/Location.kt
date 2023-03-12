@@ -12,7 +12,8 @@ data class Location(
     val lon: Double,
     val englishName: String,
     val locality: String,
-    val country: String
+    val country: String,
+    var isPrimary: Boolean = false
 ) {
     companion object {
         const val TABLE_NAME = "location"

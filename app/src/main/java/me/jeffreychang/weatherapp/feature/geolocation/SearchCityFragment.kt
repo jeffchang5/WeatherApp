@@ -1,4 +1,4 @@
-package me.jeffreychang.weatherapp.feature.weather
+package me.jeffreychang.weatherapp.feature.geolocation
 
 
 import androidx.compose.foundation.clickable
@@ -17,17 +17,21 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import me.jeffreychang.weatherapp.R
 import me.jeffreychang.weatherapp.data.location.LocationRepository
 import me.jeffreychang.weatherapp.feature.ScreenTransition
 import me.jeffreychang.weatherapp.feature.ScreenTransitionViewModel
 import me.jeffreychang.weatherapp.feature.geolocation.GetGeoCoderLocationUseCase
 import me.jeffreychang.weatherapp.feature.geolocation.SearchCityViewModel
+import me.jeffreychang.weatherapp.feature.weather.WeatherRepository
 import me.jeffreychang.weatherapp.model.dto.Location
 import me.jeffreychang.weatherapp.model.geolocation.LocationDto
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
 import me.jeffreychang.weatherapp.testOneShotWeather
 import me.jeffreychang.weatherapp.util.ComposeFragment
+import me.jeffreychang.weatherapp.util.LatLng
 import me.jeffreychang.weatherapp.util.LocationProvider
 
 
@@ -71,6 +75,7 @@ fun CitySearchView(
 ) {
     var text by remember { mutableStateOf("") }
     val locations by viewModel.locations().observeAsState(emptyList())
+
     TextField(value = text, onValueChange = {
         text = it
         viewModel.search(it)
@@ -112,7 +117,8 @@ fun CitySearchView(
 @Composable
 fun PreviewSearchCityScreen() {
     val weatherRepo = object : WeatherRepository {
-        override suspend fun getWeather(): OneShotWeather {
+
+        override suspend fun getWeather(latLng: LatLng): OneShotWeather {
             return testOneShotWeather
         }
 
@@ -121,7 +127,8 @@ fun PreviewSearchCityScreen() {
         }
     }
     val testLocationProvider = object : LocationProvider {
-        override suspend fun getAddress(): String {
+
+        override suspend fun getAddress(latLng: LatLng): String {
             return ""
         }
 
@@ -134,21 +141,25 @@ fun PreviewSearchCityScreen() {
         }
     }
     val repo = object : LocationRepository {
+        override val localLocation: Flow<Location>
+            get() = flow {
+                emit(
+                    Location(
+                        0,
+                        "Los Angeles",
+                        0.0,
+                        0.0,
+                        "Los Angeles",
+                        "Los Angeles",
+                        "US"
+                    )
+                )
+            }
+
         override suspend fun putLocation(location: Location) {
 
         }
 
-        override suspend fun getLocation(): Location {
-            return Location(
-                0,
-                "Los Angeles",
-                0.0,
-                0.0,
-                "Los Angeles",
-                "Los Angeles",
-                "US"
-            )
-        }
     }
     val viewModel =
         SearchCityViewModel(

@@ -30,10 +30,10 @@ class TrendingGifsViewModelTest {
     fun `Empty gifs list results in empty UI state`() {
         runBlocking {
             val gifRepo: WeatherRepository = mockk {
-                coEvery { getWeather() } returns emptyList()
+                coEvery { getWeather(location) } returns emptyList()
             }
 
-            val useCase = GetCurrentWeatherUseCase(gifRepo)
+            val useCase = GetCurrentWeatherWithGpsUseCase(gifRepo)
 
             val trendingGifsViewModel =
                 CurrentWeatherViewModel(contextProvider, useCase, SavedStateHandle())
@@ -46,10 +46,10 @@ class TrendingGifsViewModelTest {
     fun `Non-empty gifs list results in Success UI state`() {
         runBlocking {
             val gifRepo: WeatherRepository = mockk {
-                coEvery { getWeather() } returns listOf(gif1)
+                coEvery { getWeather(location) } returns listOf(gif1)
             }
 
-            val useCase = GetCurrentWeatherUseCase(gifRepo)
+            val useCase = GetCurrentWeatherWithGpsUseCase(gifRepo)
 
             val gifsViewModel = CurrentWeatherViewModel(contextProvider, useCase, SavedStateHandle())
 
@@ -61,14 +61,14 @@ class TrendingGifsViewModelTest {
     fun `Gifs in saved state handle results in Success UI state`() {
         runBlocking {
             val gifRepo: WeatherRepository = mockk {
-                coEvery { getWeather() } returns listOf(gif1)
+                coEvery { getWeather(location) } returns listOf(gif1)
             }
 
-            val useCase = GetCurrentWeatherUseCase(gifRepo)
+            val useCase = GetCurrentWeatherWithGpsUseCase(gifRepo)
 
             val gifsViewModel =
                 CurrentWeatherViewModel(contextProvider, useCase, SavedStateHandle().apply {
-                    set(GIPHY_STATE, listOf(gif1))
+                    set(WEATHER_STATE, listOf(gif1))
                 })
 
 
@@ -84,10 +84,10 @@ class TrendingGifsViewModelTest {
     fun `fetching gifs exception results in Error UI state`() {
         runBlocking {
             val gifRepo: WeatherRepository = mockk {
-                coEvery { getWeather() } throws Exception()
+                coEvery { getWeather(location) } throws Exception()
             }
 
-            val useCase = GetCurrentWeatherUseCase(gifRepo)
+            val useCase = GetCurrentWeatherWithGpsUseCase(gifRepo)
 
             val gifsViewModel = CurrentWeatherViewModel(contextProvider, useCase, SavedStateHandle())
 

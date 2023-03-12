@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/searchCityFragment"
-        android:name="me.jeffreychang.weatherapp.feature.weather.SearchCityFragment"
+        android:name="me.jeffreychang.weatherapp.feature.geolocation.SearchCityFragment"
         android:label="@string/label_search" />
 
 </navigation>

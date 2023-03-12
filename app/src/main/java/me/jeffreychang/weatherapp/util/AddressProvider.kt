@@ -10,9 +10,10 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+data class LatLng(val lat: Double, val lng: Double)
 interface LocationProvider {
 
-    suspend fun getAddress(): String
+    suspend fun getAddress(latLng: LatLng): String
 
     fun getCountryCode(): String
 
@@ -24,12 +25,12 @@ class AndroidLocationProvider @Inject constructor(
     private val context: Context,
     private val contextProvider: ContextProvider
 ) : LocationProvider {
-    override suspend fun getAddress(): String {
+    override suspend fun getAddress(latLng: LatLng): String {
         val geocoder = Geocoder(context)
         return withContext(contextProvider.io) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 suspendCoroutine { continuation ->
-                    geocoder.getFromLocation(42.46, -83.49, 1) {
+                    geocoder.getFromLocation(latLng.lat, latLng.lng, 1) {
                         continuation.resume(it.first().locality)
                     }
                 }
