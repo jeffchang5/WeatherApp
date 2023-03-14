@@ -20,14 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import me.jeffreychang.weatherapp.R
 import me.jeffreychang.weatherapp.data.location.LocationRepository
-import me.jeffreychang.weatherapp.feature.ScreenTransition
-import me.jeffreychang.weatherapp.feature.ScreenTransitionViewModel
 import me.jeffreychang.weatherapp.feature.weather.WeatherRepository
 import me.jeffreychang.weatherapp.model.dto.Location
 import me.jeffreychang.weatherapp.model.geolocation.LocationDto
@@ -44,9 +40,6 @@ class SearchCityFragment : Fragment() {
 
     private val viewModel: SearchCityViewModel by viewModels()
 
-    private val navViewModel: ScreenTransitionViewModel by navGraphViewModels(R.id.nav_weather)
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,7 +51,6 @@ class SearchCityFragment : Fragment() {
     }
 
     private fun navigate() {
-        navViewModel.transition(ScreenTransition.CitySelected)
         findNavController().navigateUp()
     }
 }
