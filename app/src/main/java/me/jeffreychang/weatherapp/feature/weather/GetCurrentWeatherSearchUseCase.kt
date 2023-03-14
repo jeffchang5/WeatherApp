@@ -6,14 +6,15 @@ import me.jeffreychang.weatherapp.util.LatLng
 import javax.inject.Inject
 
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
+import me.jeffreychang.weatherapp.util.ResultOf
 
 class GetCurrentWeatherSearchUseCase @Inject constructor(
-    private val weatherRepository: WeatherRepository,
+    private val weatherRepository: WeatherRepository
 ) {
-    suspend fun getCurrentWeather(location: Location): WeatherDto {
+    suspend fun getCurrentWeather(location: Location): ResultOf<WeatherDto> {
         return weatherRepository
             .getWeather(LatLng(location.lat, location.lon))
-            .toDto(cityName = location.cityName)
+            .map { it.toDto(location.cityName) }
     }
 
     private fun OneShotWeather.toDto(cityName: String): WeatherDto {

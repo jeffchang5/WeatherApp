@@ -29,10 +29,11 @@ class SearchCityViewModel @Inject constructor(
         debounce {
             when (val result = getGeoLocationUseCase.getGeoLocation(query)) {
                 is ResultOf.Success -> {
-                    locations.value = result.value
+                    locations.value = (result.value)
                 }
                 is ResultOf.Failure -> {
-                    // TODO: handle
+                    // TODO: create more unique UX for this, but right now. I wouldn't'
+                    // want to flood the user with error messages
                 }
             }
         }
@@ -45,6 +46,7 @@ class SearchCityViewModel @Inject constructor(
         }
     }
 
+    // Only searches after time from keyboard input to avoid too many API calls.
     private fun debounce(
         waitMs: Long = 300L,
         destinationFunction: suspend () -> Unit

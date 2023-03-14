@@ -1,6 +1,7 @@
 package me.jeffreychang.weatherapp.model.dto
 
 import androidx.room.TypeConverter
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -9,7 +10,11 @@ import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
 
 class Converters {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    @OptIn(ExperimentalSerializationApi::class)
+    private val json = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+    }
 
     @TypeConverter
     fun fromJson(value: String?): OneShotWeather? {

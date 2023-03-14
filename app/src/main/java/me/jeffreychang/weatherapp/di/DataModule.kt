@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import me.jeffreychang.weatherapp.AppDatabase
 import me.jeffreychang.weatherapp.Constants
@@ -43,11 +44,13 @@ class DataModule {
         return OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val contentType = "application/json".toMediaType()
         val json = Json {
             ignoreUnknownKeys = true
+            explicitNulls = false
         }
         return Retrofit.Builder()
             .baseUrl(Constants.OPEN_WEATHER_API_URL)
@@ -69,6 +72,7 @@ class DataModule {
     fun provideWeatherDao(appDatabase: AppDatabase): WeatherDao {
         return appDatabase.weatherDao()
     }
+
     @Provides
     fun provideLocationDao(appDatabase: AppDatabase): LocationDao {
         return appDatabase.locationDao()

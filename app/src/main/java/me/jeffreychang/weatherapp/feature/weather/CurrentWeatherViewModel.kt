@@ -10,6 +10,7 @@ import me.jeffreychang.weatherapp.data.location.LocationRepository
 import me.jeffreychang.weatherapp.model.dto.WeatherDto
 import me.jeffreychang.weatherapp.util.ContextProvider
 import me.jeffreychang.weatherapp.util.LatLng
+import me.jeffreychang.weatherapp.util.ResultOf
 import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -35,7 +36,7 @@ sealed class UiState {
 @HiltViewModel
 class CurrentWeatherViewModel @Inject constructor(
     private val contextProvider: ContextProvider,
-    private val getCurrentWeatherUseCase: GetCurrentWeatherWithGpsUseCase,
+    private val getCurrentWeatherGpsUseCase: GetCurrentWeatherWithGpsUseCase,
     private val getCurrentWeatherSearchUseCase: GetCurrentWeatherSearchUseCase,
     private val locationRepository: LocationRepository,
 ) : ViewModel() {
@@ -58,17 +59,19 @@ class CurrentWeatherViewModel @Inject constructor(
 
     fun getCurrentWeather(latLng: LatLng) {
         tryGetWeather {
-            getCurrentWeatherUseCase.getCurrentWeather(latLng)
+            getCurrentWeatherGpsUseCase.getCurrentWeather(latLng)
         }
     }
 
-    private fun tryGetWeather(block: suspend () -> WeatherDto) {
+    private fun tryGetWeather(block: suspend () -> ResultOf<WeatherDto>) {
         launch {
-            try {
-                val weatherDto = block()
-                uiState.value = UiState.Success(weatherDto)
-            } catch (t: Throwable) {
-                uiState.postValue(t.toError())
+            when (val weatherDto = block()) {
+                is ResultOf.Success -> {
+                    uiState.value = UiState.Success(weatherDto.value)
+                }
+                is ResultOf.Failure -> {
+                    uiState.postValue(weatherDto.throwable?.toError())
+                }
             }
         }
     }

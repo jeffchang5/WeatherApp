@@ -28,20 +28,29 @@ public abstract class GpsFragment extends Fragment implements LocationListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        permission = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
-            if (granted) {
-                getLocation();
-            } else if (!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                onLocationPermissionDeclined();
-            } else {
-                Toast.makeText(requireContext(), "Device needs to support GPS location to continue!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        permission = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(), granted -> {
+                    if (granted) {
+                        getLocation();
+                    } else if (!shouldShowRequestPermissionRationale(
+                            Manifest.permission.ACCESS_COARSE_LOCATION)
+                    ) {
+                        onLocationPermissionDeclined();
+                    } else {
+                        Toast.makeText(requireContext(),
+                                "Device needs to support GPS location to continue!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void askForLocation() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            Toast.makeText(requireContext(), "Need permission", Toast.LENGTH_SHORT).show();
+        if (shouldShowRequestPermissionRationale(
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            Toast.makeText(requireContext(),
+                    "Need permission",
+                    Toast.LENGTH_SHORT).show();
         } else {
             permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
         }
@@ -56,5 +65,13 @@ public abstract class GpsFragment extends Fragment implements LocationListener {
     public void getLocation() {
         LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0F, this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocationManager locationManager = (LocationManager) requireContext()
+                .getSystemService(Context.LOCATION_SERVICE);
+        locationManager.removeUpdates(this);
     }
 }

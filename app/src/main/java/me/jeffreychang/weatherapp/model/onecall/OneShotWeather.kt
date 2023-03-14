@@ -20,7 +20,7 @@ data class OneShotWeather(
     @SerialName("lon")
     val lon: Double,
     @SerialName("minutely")
-    val minutely: List<Minutely>,
+    val minutely: List<Minutely> = emptyList(),
     @SerialName("timezone")
     val timezone: String,
     @SerialName("timezone_offset")

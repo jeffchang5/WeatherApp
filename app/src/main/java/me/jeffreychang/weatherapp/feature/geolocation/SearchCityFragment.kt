@@ -35,6 +35,7 @@ import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
 import me.jeffreychang.weatherapp.testOneShotWeather
 import me.jeffreychang.weatherapp.util.LatLng
 import me.jeffreychang.weatherapp.util.LocationProvider
+import me.jeffreychang.weatherapp.util.ResultOf
 import me.jeffreychang.weatherapp.util.composeView
 
 
@@ -127,8 +128,8 @@ fun CitySearchView(
 fun PreviewSearchCityScreen() {
     val weatherRepo = object : WeatherRepository {
 
-        override suspend fun getWeather(latLng: LatLng): OneShotWeather {
-            return testOneShotWeather
+        override suspend fun getWeather(latLng: LatLng): ResultOf<OneShotWeather> {
+            return ResultOf.Success(testOneShotWeather)
         }
 
         override suspend fun getGeoCodeLocation(query: String): List<LocationDto> {
