@@ -2,9 +2,8 @@ package me.jeffreychang.weatherapp.feature.weather
 
 import kotlinx.coroutines.withContext
 import me.jeffreychang.weatherapp.Constants
-import me.jeffreychang.weatherapp.data.WeatherDao
-import me.jeffreychang.weatherapp.data.WeatherService
-import me.jeffreychang.weatherapp.model.dto.Location
+import me.jeffreychang.weatherapp.data.weather.WeatherDao
+import me.jeffreychang.weatherapp.data.weather.WeatherService
 import me.jeffreychang.weatherapp.model.geolocation.LocationDto
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather.Companion.toDto

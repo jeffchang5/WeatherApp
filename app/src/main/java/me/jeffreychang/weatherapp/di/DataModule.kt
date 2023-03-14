@@ -12,18 +12,15 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import me.jeffreychang.weatherapp.AppDatabase
 import me.jeffreychang.weatherapp.Constants
-import me.jeffreychang.weatherapp.feature.currentweather.LocationDao
-import me.jeffreychang.weatherapp.data.WeatherDao
+import me.jeffreychang.weatherapp.data.location.LocationDao
+import me.jeffreychang.weatherapp.data.weather.WeatherDao
 import me.jeffreychang.weatherapp.util.AppContextProvider
 import me.jeffreychang.weatherapp.util.ContextProvider
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 
 @Module
@@ -60,7 +57,8 @@ class DataModule {
     }
 
     @Provides
-    fun provideDto(@ApplicationContext applicationContext: Context): AppDatabase {
+    @Singleton
+    fun provideDatabase(@ApplicationContext applicationContext: Context): AppDatabase {
         return Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "weather-app-db"

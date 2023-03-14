@@ -1,4 +1,4 @@
-package me.jeffreychang.weatherapp.data
+package me.jeffreychang.weatherapp.data.weather
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -18,6 +18,5 @@ interface WeatherDao {
 
     @Delete
     fun delete(user: WeatherDto)
-
 
 }

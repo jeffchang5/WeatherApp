@@ -2,14 +2,19 @@ package me.jeffreychang.weatherapp.feature.currentweather
 
 
 import android.icu.text.DateFormat
+import android.location.Location
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import coil.compose.AsyncImage
 import com.patrykandpatrick.vico.compose.axis.horizontal.topAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
@@ -36,8 +40,6 @@ import com.patrykandpatrick.vico.core.entry.ChartEntry
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import dagger.hilt.android.AndroidEntryPoint
 import me.jeffreychang.weatherapp.R
-import me.jeffreychang.weatherapp.feature.ScreenTransitionViewModel
-import me.jeffreychang.weatherapp.feature.ScreenTransition
 import me.jeffreychang.weatherapp.feature.weather.CurrentWeatherViewModel
 import me.jeffreychang.weatherapp.feature.weather.UiState
 import me.jeffreychang.weatherapp.feature.weather.formatter
@@ -46,7 +48,9 @@ import me.jeffreychang.weatherapp.model.onecall.Current
 import me.jeffreychang.weatherapp.model.onecall.Hourly
 import me.jeffreychang.weatherapp.ui.daily.DailyCard
 import me.jeffreychang.weatherapp.ui.theme.Typography
-import me.jeffreychang.weatherapp.util.ComposeFragment
+import me.jeffreychang.weatherapp.util.GpsFragment
+import me.jeffreychang.weatherapp.util.LatLng
+import me.jeffreychang.weatherapp.util.composeView
 import me.jeffreychang.weatherapp.util.rememberChartStyle
 import me.jeffreychang.weatherapp.weatherDto
 import timber.log.Timber
@@ -54,35 +58,38 @@ import timber.log.Timber
 private val hourFormatter: DateFormat = DateFormat.getPatternInstance(DateFormat.HOUR_MINUTE)
 
 @AndroidEntryPoint
-class CurrentWeatherFragment : ComposeFragment() {
+class CurrentWeatherFragment : GpsFragment() {
 
     private val viewModel: CurrentWeatherViewModel by viewModels()
 
-    private val navViewModel: ScreenTransitionViewModel by navGraphViewModels(R.id.nav_weather)
-
-    @Composable
-    override fun ComposeView() {
-        Surface(
-            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-        ) {
-            CurrentWeather(viewModel)
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Bottom,
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return composeView {
+            Surface(
+                modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
             ) {
-                FloatingActionButton(
-                    modifier = Modifier.padding(16.dp),
-                    onClick = {
-                        findNavController().navigate(R.id.searchCityFragment)
-                    },
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    shape = CircleShape,
+                CurrentWeather(viewModel)
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = "Add FAB",
-                        tint = Color.White,
-                    )
+                    FloatingActionButton(
+                        modifier = Modifier.padding(16.dp),
+                        onClick = {
+                            findNavController().navigate(R.id.searchCityFragment)
+                        },
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        shape = CircleShape,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = "Add FAB",
+                            tint = Color.White,
+                        )
+                    }
                 }
             }
         }
@@ -90,16 +97,15 @@ class CurrentWeatherFragment : ComposeFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navViewModel.transitions().observe(viewLifecycleOwner) {
-            when (it) {
-                is ScreenTransition.CitySelected -> {
-//                    viewModel.getCurrentWeather()
-                }
-                else -> {
+        askForLocation()
+    }
 
-                }
-            }
-        }
+    override fun onLocationPermissionGranted(location: Location) {
+        viewModel.getCurrentWeather(LatLng(location.latitude, location.longitude))
+    }
+
+    override fun onLocationPermissionDeclined() {
+        Toast.makeText(requireContext(), "Requires location permission", Toast.LENGTH_SHORT).show()
     }
 }
 

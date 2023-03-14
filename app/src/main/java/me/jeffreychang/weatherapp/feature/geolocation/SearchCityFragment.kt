@@ -1,6 +1,10 @@
 package me.jeffreychang.weatherapp.feature.geolocation
 
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +17,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -23,28 +28,32 @@ import me.jeffreychang.weatherapp.R
 import me.jeffreychang.weatherapp.data.location.LocationRepository
 import me.jeffreychang.weatherapp.feature.ScreenTransition
 import me.jeffreychang.weatherapp.feature.ScreenTransitionViewModel
-import me.jeffreychang.weatherapp.feature.geolocation.GetGeoCoderLocationUseCase
-import me.jeffreychang.weatherapp.feature.geolocation.SearchCityViewModel
 import me.jeffreychang.weatherapp.feature.weather.WeatherRepository
 import me.jeffreychang.weatherapp.model.dto.Location
 import me.jeffreychang.weatherapp.model.geolocation.LocationDto
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
 import me.jeffreychang.weatherapp.testOneShotWeather
-import me.jeffreychang.weatherapp.util.ComposeFragment
 import me.jeffreychang.weatherapp.util.LatLng
 import me.jeffreychang.weatherapp.util.LocationProvider
+import me.jeffreychang.weatherapp.util.composeView
 
 
 @AndroidEntryPoint
-class SearchCityFragment : ComposeFragment() {
+class SearchCityFragment : Fragment() {
 
     private val viewModel: SearchCityViewModel by viewModels()
 
     private val navViewModel: ScreenTransitionViewModel by navGraphViewModels(R.id.nav_weather)
 
-    @Composable
-    override fun ComposeView() {
-        return SearchCityScreen(viewModel, ::navigate)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return composeView {
+            SearchCityScreen(viewModel, ::navigate)
+        }
     }
 
     private fun navigate() {

@@ -1,4 +1,4 @@
-package me.jeffreychang.weatherapp.data
+package me.jeffreychang.weatherapp.data.weather
 
 import me.jeffreychang.weatherapp.model.geolocation.LocationDto
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather

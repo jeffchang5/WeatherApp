@@ -35,7 +35,7 @@ class AndroidLocationProvider @Inject constructor(
                     }
                 }
             } else {
-                geocoder.getFromLocation(42.46, -83.49, 1)?.first()?.locality.orEmpty()
+                geocoder.getFromLocation(latLng.lng, latLng.lng, 1)?.first()?.locality.orEmpty()
             }
         }
     }

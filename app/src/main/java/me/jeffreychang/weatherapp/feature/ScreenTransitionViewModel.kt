@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import me.jeffreychang.weatherapp.feature.currentweather.LocationDao
 import javax.inject.Inject
 
 sealed class ScreenTransition {

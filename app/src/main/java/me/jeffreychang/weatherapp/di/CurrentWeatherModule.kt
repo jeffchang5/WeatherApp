@@ -8,11 +8,11 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import me.jeffreychang.weatherapp.feature.weather.OpenWeatherRepository
 import me.jeffreychang.weatherapp.feature.weather.WeatherRepository
-import me.jeffreychang.weatherapp.data.WeatherDao
-import me.jeffreychang.weatherapp.data.WeatherService
+import me.jeffreychang.weatherapp.data.weather.WeatherDao
+import me.jeffreychang.weatherapp.data.weather.WeatherService
 import me.jeffreychang.weatherapp.data.location.LocalLocationRepository
 import me.jeffreychang.weatherapp.data.location.LocationRepository
-import me.jeffreychang.weatherapp.feature.currentweather.LocationDao
+import me.jeffreychang.weatherapp.data.location.LocationDao
 import me.jeffreychang.weatherapp.util.AndroidLocationProvider
 import me.jeffreychang.weatherapp.util.ContextProvider
 import me.jeffreychang.weatherapp.util.LocationProvider

@@ -5,6 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerializationException
 import me.jeffreychang.weatherapp.data.location.LocationRepository
 import me.jeffreychang.weatherapp.model.dto.WeatherDto
 import me.jeffreychang.weatherapp.util.ContextProvider
@@ -37,20 +38,11 @@ class CurrentWeatherViewModel @Inject constructor(
     private val getCurrentWeatherUseCase: GetCurrentWeatherWithGpsUseCase,
     private val getCurrentWeatherSearchUseCase: GetCurrentWeatherSearchUseCase,
     private val locationRepository: LocationRepository,
-    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
-    private val savedWeather: LiveData<WeatherDto> =
-        savedStateHandle.getLiveData<WeatherDto>(WEATHER_STATE)
 
     private val uiState = MutableLiveData<UiState>()
 
     init {
-//        savedWeather.value?.let {
-//            uiState.postValue(UiState.Success(it))
-//        } ?: run {
-//            getCurrentWeather(Location())
-//        }
         viewModelScope.launch {
             locationRepository.localLocation.collect {
                 tryGetWeather {
@@ -84,7 +76,7 @@ class CurrentWeatherViewModel @Inject constructor(
     private fun Throwable.toError(): UiState.Error {
         return when (this) {
             is UnknownHostException -> UiState.Error(ErrorReason.NO_NETWORK, this)
-//            is J -> UiState.Error(ErrorReason.MALFORMED, this)
+            is SerializationException -> UiState.Error(ErrorReason.MALFORMED, this)
             else -> {
                 return UiState.Error(ErrorReason.UNKNOWN, this)
             }

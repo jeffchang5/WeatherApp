@@ -1,6 +1,5 @@
 package me.jeffreychang.weatherapp.feature.weather
 
-import me.jeffreychang.weatherapp.model.dto.Location
 import me.jeffreychang.weatherapp.model.dto.WeatherDto
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
 import me.jeffreychang.weatherapp.util.LatLng
