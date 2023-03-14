@@ -1,6 +1,5 @@
 package me.jeffreychang.weatherapp.feature.weather
 
-import android.widget.Toast
 import kotlinx.coroutines.withContext
 import me.jeffreychang.weatherapp.Constants
 import me.jeffreychang.weatherapp.data.weather.WeatherDao

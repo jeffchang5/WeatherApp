@@ -7,7 +7,7 @@ import me.jeffreychang.weatherapp.util.ContextProvider
 
 interface LocationRepository {
 
-    val localLocation: Flow<Location>
+    val searchLocation: Flow<Location>
     suspend fun putLocation(location: Location)
 
 }
@@ -17,7 +17,7 @@ class LocalLocationRepository constructor(
     private val locationDao: LocationDao
 ) : LocationRepository {
 
-    override val localLocation get() = locationDao.getPrimaryLocation()
+    override val searchLocation get() = locationDao.getPrimaryLocation()
 
     override suspend fun putLocation(location: Location) {
         withContext(contextProvider.io) {

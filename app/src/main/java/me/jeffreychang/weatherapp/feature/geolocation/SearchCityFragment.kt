@@ -151,7 +151,7 @@ fun PreviewSearchCityScreen() {
         }
     }
     val repo = object : LocationRepository {
-        override val localLocation: Flow<Location>
+        override val searchLocation: Flow<Location>
             get() = flow {
                 emit(
                     Location(

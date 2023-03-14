@@ -15,8 +15,6 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-const val WEATHER_STATE = "WEATHER_STATE"
-
 enum class ErrorReason {
     NO_NETWORK, MALFORMED, UNKNOWN
 }
@@ -44,8 +42,8 @@ class CurrentWeatherViewModel @Inject constructor(
     private val uiState = MutableLiveData<UiState>()
 
     init {
-        viewModelScope.launch {
-            locationRepository.localLocation.collect {
+        launch {
+            locationRepository.searchLocation.collect {
                 tryGetWeather {
                     getCurrentWeatherSearchUseCase.getCurrentWeather(it)
                 }
