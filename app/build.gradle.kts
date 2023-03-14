@@ -11,7 +11,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "me.jeffreychang.giphy"
+        applicationId = "me.jeffreychang.weatherapp"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -116,8 +116,8 @@ dependencies {
 
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("androidx.test:core:1.5.0")
@@ -127,5 +127,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
 
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // not writing UI tests
 //    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.compose}")
 }

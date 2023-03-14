@@ -30,10 +30,10 @@ class CurrentWeatherModule {
     @Provides
     fun provideWeatherRepository(
         contextProvider: ContextProvider,
-        giphyService: WeatherService,
+        weatherService: WeatherService,
         weatherDao: WeatherDao
     ): WeatherRepository {
-        return OpenWeatherRepository(contextProvider, giphyService, weatherDao)
+        return OpenWeatherRepository(contextProvider, weatherService, weatherDao)
     }
 
     @Provides
