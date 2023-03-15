@@ -8,7 +8,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -32,10 +31,6 @@ public abstract class GpsFragment extends Fragment implements LocationListener {
                 new ActivityResultContracts.RequestPermission(), granted -> {
                     if (granted) {
                         getLocation();
-                    } else if (!shouldShowRequestPermissionRationale(
-                            Manifest.permission.ACCESS_COARSE_LOCATION)
-                    ) {
-                        onLocationPermissionDeclined();
                     } else {
                         onLocationPermissionDeclined();
                     }
@@ -43,7 +38,6 @@ public abstract class GpsFragment extends Fragment implements LocationListener {
     }
 
     public void askForLocation() {
-        // TODO: add dialog to inform the user of need to have location
         permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
