@@ -17,7 +17,7 @@ class LocalLocationRepository constructor(
     private val locationDao: LocationDao
 ) : LocationRepository {
 
-    override val searchLocation get() = locationDao.getPrimaryLocation()
+    override val searchLocation get() = locationDao.getPrimaryLocation().filterNotNull()
 
     override suspend fun putLocation(location: Location) {
         withContext(contextProvider.io) {

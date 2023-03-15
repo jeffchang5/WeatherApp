@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -46,6 +45,7 @@ import me.jeffreychang.weatherapp.feature.weather.formatter
 import me.jeffreychang.weatherapp.model.dto.WeatherDto
 import me.jeffreychang.weatherapp.model.onecall.Current
 import me.jeffreychang.weatherapp.model.onecall.Hourly
+import me.jeffreychang.weatherapp.model.onecall.Temp
 import me.jeffreychang.weatherapp.ui.daily.DailyCard
 import me.jeffreychang.weatherapp.ui.theme.Typography
 import me.jeffreychang.weatherapp.util.GpsFragment
@@ -154,7 +154,8 @@ private val chartColors = listOf(color1)
 fun CurrentWeather(weatherDto: WeatherDto) {
     Column {
         val weather = weatherDto.weather
-        CurrentWeatherCard(weather.current, weatherDto.cityId)
+        val temp = weather.daily.first().temp
+        CurrentWeatherCard(weather.current, weatherDto.cityId, temp)
         Text(
             style = Typography.titleMedium, modifier = Modifier.padding(
                 horizontal = 16.dp, vertical = 8.dp
@@ -258,7 +259,11 @@ fun HourlyWeather(hourly: List<Hourly>) {
 }
 
 @Composable
-fun CurrentWeatherCard(currentWeather: Current, cityId: String) {
+fun CurrentWeatherCard(
+    currentWeather: Current,
+    cityId: String,
+    temp: Temp
+) {
     ElevatedCard(
         modifier = Modifier
             .padding(16.dp)
@@ -314,6 +319,12 @@ fun CurrentWeatherCard(currentWeather: Current, cityId: String) {
                     modifier = Modifier.padding(
                         horizontal = 16.dp, vertical = 8.dp
                     ), text = "feels like " + formatter.format(currentWeather.feelsLike)
+                )
+                Text(
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    ), text = "L: ${formatter.format(temp.min)} H: ${formatter.format(temp.max)}"
                 )
             }
         }
