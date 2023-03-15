@@ -26,7 +26,7 @@ sealed class UiState {
 
     data class Success(val weatherDto: WeatherDto) : UiState()
 
-    object Empty : UiState()
+    object LocationDenied : UiState()
 
     data class Error(val errorReason: ErrorReason, val t: Throwable) : UiState()
 
@@ -92,6 +92,10 @@ class CurrentWeatherViewModel @Inject constructor(
         block: suspend CoroutineScope.() -> Unit
     ): Job {
         return viewModelScope.launch(coroutineContext) { block() }
+    }
+
+    fun onPermissionFailed() {
+        uiState.value = UiState.LocationDenied
     }
 }
 

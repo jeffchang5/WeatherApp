@@ -105,7 +105,10 @@ class CurrentWeatherFragment : GpsFragment() {
     }
 
     override fun onLocationPermissionDeclined() {
-        Toast.makeText(requireContext(), "Requires location permission", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Requires location permission", Toast.LENGTH_SHORT)
+            .show()
+
+        viewModel.onPermissionFailed()
     }
 }
 
@@ -126,8 +129,8 @@ fun CurrentWeather(
             Timber.e(state.t)
             CenteredText(text = "Error")
         }
-        is UiState.Empty -> {
-            CenteredText(text = "Empty")
+        is UiState.LocationDenied -> {
+            CenteredText(text = "Location Permission Denied")
         }
     }
 }

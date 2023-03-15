@@ -37,23 +37,14 @@ public abstract class GpsFragment extends Fragment implements LocationListener {
                     ) {
                         onLocationPermissionDeclined();
                     } else {
-                        Toast.makeText(requireContext(),
-                                "Device needs to support GPS location to continue!",
-                                Toast.LENGTH_SHORT).show();
+                        onLocationPermissionDeclined();
                     }
                 });
     }
 
     public void askForLocation() {
-        if (shouldShowRequestPermissionRationale(
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-        ) {
-            Toast.makeText(requireContext(),
-                    "Need permission",
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
+        // TODO: add dialog to inform the user of need to have location
+        permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
     @Override
