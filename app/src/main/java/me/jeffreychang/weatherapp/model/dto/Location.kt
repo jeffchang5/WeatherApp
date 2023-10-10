@@ -1,5 +1,6 @@
 package me.jeffreychang.weatherapp.model.dto
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -13,7 +14,9 @@ data class Location(
     val englishName: String,
     val locality: String,
     val country: String,
-    var isPrimary: Boolean = false
+    var isPrimary: Boolean = false,
+    @ColumnInfo(name = "created_at")
+    val createdAt: Long
 ) {
     companion object {
         const val TABLE_NAME = "location"

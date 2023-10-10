@@ -22,10 +22,12 @@ class GetGeoCoderLocationUseCase @Inject constructor(
                 }
                 .filter { it.localNames?.en != null } // make sure value is not missing.
                 .map { it.toUiModel() }
+                .distinctBy { it.id }
             ResultOf.Success(geoLocation)
         } catch (t: Throwable) {
             Timber.e(t)
             ResultOf.Failure("Failed to get any cities.", t)
         }
     }
+
 }

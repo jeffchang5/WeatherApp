@@ -284,6 +284,7 @@ fun CurrentWeatherCard(
                     .weight(2f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+//                weather.toResource().invoke()
                 AsyncImage(
                     modifier = Modifier
                         .height(96.dp)
@@ -325,8 +326,7 @@ fun CurrentWeatherCard(
                 )
                 Text(
                     modifier = Modifier.padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
+                        bottom = 16.dp
                     ), text = "L: ${formatter.format(temp.min)} H: ${formatter.format(temp.max)}"
                 )
             }

@@ -28,7 +28,8 @@ data class LocationDto(
             lon = lon,
             englishName = localNames?.en!!,
             locality = state,
-            country = country
+            country = country,
+            createdAt = System.currentTimeMillis()
         )
     }
 }

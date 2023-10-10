@@ -3,8 +3,8 @@ package me.jeffreychang.weatherapp.feature.geolocation
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +29,7 @@ import me.jeffreychang.weatherapp.model.dto.Location
 import me.jeffreychang.weatherapp.model.geolocation.LocationDto
 import me.jeffreychang.weatherapp.model.onecall.OneShotWeather
 import me.jeffreychang.weatherapp.testOneShotWeather
+import me.jeffreychang.weatherapp.ui.theme.Typography
 import me.jeffreychang.weatherapp.util.LatLng
 import me.jeffreychang.weatherapp.util.LocationProvider
 import me.jeffreychang.weatherapp.util.ResultOf
@@ -44,10 +45,8 @@ class SearchCityFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return composeView {
-            SearchCityScreen(viewModel, ::navigate)
-        }
+    ) = composeView {
+        SearchCityScreen(viewModel, ::navigate)
     }
 
     private fun navigate() {
@@ -69,7 +68,7 @@ fun SearchCityScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CitySearchView(
     viewModel: SearchCityViewModel,
@@ -77,6 +76,7 @@ fun CitySearchView(
 ) {
     var text by remember { mutableStateOf("") }
     val locations by viewModel.locations().observeAsState(emptyList())
+    val recentLocations by viewModel.recentLocations().observeAsState(emptyList())
 
     TextField(value = text, onValueChange = {
         text = it
@@ -96,7 +96,35 @@ fun CitySearchView(
         placeholder = { Text("City") }
     )
     LazyColumn {
-        items(locations) {
+        items(locations, key = {
+            it.id
+        }) {
+            Text(
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .height(IntrinsicSize.Max)
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                        val location = it
+                        viewModel.updateLocation(location) {
+                            // function block is make sure location is inserted before
+                            // moving between screens.
+                            transition()
+                        }
+                    },
+                text = "${it.englishName}, ${it.locality}, ${it.country}",
+            )
+        }
+        item {
+            Text(
+                style = Typography.titleMedium,
+                modifier = Modifier.padding(
+                    horizontal = 16.dp, vertical = 8.dp
+                ), text = "Recents"
+            )
+        }
+        items(recentLocations) {
             Text(
                 modifier = Modifier
                     .padding(16.dp)
@@ -153,7 +181,9 @@ fun PreviewSearchCityScreen() {
                         0.0,
                         "Los Angeles",
                         "Los Angeles",
-                        "US"
+                        "US",
+                        false,
+                        System.currentTimeMillis()
                     )
                 )
             }
@@ -162,12 +192,15 @@ fun PreviewSearchCityScreen() {
 
         }
 
+        override val recentLocations: Flow<List<Location>>
+            get() = flow {}
+
     }
-    val viewModel =
-        SearchCityViewModel(
-            GetGeoCoderLocationUseCase(weatherRepo, testLocationProvider),
-            repo
-        )
+    val viewModel = SearchCityViewModel(
+        GetGeoCoderLocationUseCase(weatherRepo, testLocationProvider),
+        repo
+    )
+
     SearchCityScreen(viewModel = viewModel) {
 
     }

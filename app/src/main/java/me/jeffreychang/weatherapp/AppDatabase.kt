@@ -12,7 +12,7 @@ import me.jeffreychang.weatherapp.model.dto.WeatherDto
 @TypeConverters(Converters::class)
 @Database(
     entities = [WeatherDto::class, Location::class],
-    version = 3
+    version = 4
 )
 abstract class AppDatabase : RoomDatabase() {
 

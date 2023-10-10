@@ -10,7 +10,10 @@ interface LocationDao {
     @Query("SELECT * FROM ${Location.TABLE_NAME} WHERE isPrimary = true LIMIT 1")
     fun getPrimaryLocation(): Flow<Location>
 
-    @Insert
+    @Query("SELECT * FROM ${Location.TABLE_NAME} WHERE isPrimary = false ORDER BY created_at DESC LIMIT 5")
+    fun getRecentLocations(): Flow<List<Location>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(location: Location)
 
     @Query("UPDATE ${Location.TABLE_NAME} SET isPrimary = false")

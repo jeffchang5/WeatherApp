@@ -1,9 +1,6 @@
 package me.jeffreychang.weatherapp.feature.geolocation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -24,6 +21,9 @@ class SearchCityViewModel @Inject constructor(
     private var job: Job? = null
 
     fun locations(): LiveData<List<Location>> = locations
+
+    fun recentLocations(): LiveData<List<Location>> =
+        locationRepository.recentLocations.asLiveData()
 
     fun search(query: String) {
         debounce {

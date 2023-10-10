@@ -14,7 +14,7 @@ interface WeatherDao {
     fun getOneShotWeather(): OneShotWeather
 
     @Insert
-    fun insert(oneShotWeather: WeatherDto)
+    fun insert(weatherDto: WeatherDto)
 
     @Delete
     fun delete(user: WeatherDto)
